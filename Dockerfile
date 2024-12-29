@@ -4,7 +4,7 @@ USER root
 
 COPY install.sh /tmp/install.sh
 
-RUN apk update && apk upgrade && apk add --no-cache bash curl wget net-tools jq
+RUN apk update && apk upgrade && apk add --no-cache bash curl wget net-tools jq tar
 
 RUN bash /tmp/install.sh && rm /tmp/install.sh
 

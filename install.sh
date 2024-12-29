@@ -23,8 +23,8 @@ getCpuCore(){
 }
 
 getTargetFileURL(){
-	version=$(curl -s https://api.github.com/repos/gdy666/lucky/releases/latest | jq -r '.tag_name')
-    download_url='https://github.com/gdy666/lucky/releases/tag/'$version'/lucky_'$version'_Linux_'$cpucore'.tar.gz'
+	version=$(v=$(curl -s https://api.github.com/repos/gdy666/lucky/releases/latest | jq -r '.tag_name'); echo ${v#?})
+    download_url='https://github.com/gdy666/lucky/releases/download/v'$version'/lucky_'$version'_Linux_'$cpucore'.tar.gz'
     echo "目标文件下载链接:" $download_url
 }
 
@@ -51,8 +51,9 @@ webget(){
 }
 
 getFilesFromNetwork(){
-    webget /tmp/lucky.tar.gz $download_url
-    [ "$result" != "200" ] && echo "文件下载失败，正在退出！" && exit 1
+	wget -O /tmp/lucky.tar.gz $download_url
+    # webget /tmp/lucky.tar.gz $download_url echoon
+    # [ "$result" != "200" ] && echo "文件下载失败，正在退出！" && exit 1
     echo "-----------------------------------------------"
 	echo "开始解压文件！"
     mkdir -p $luckydir > /dev/null
