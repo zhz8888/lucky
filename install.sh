@@ -24,7 +24,7 @@ getCpuCore(){
 }
 
 getFilesFromNetwork(){
-    wget /tmp/lucky.tar.gz $download_url
+    wget -O /tmp/lucky.tar.gz $download_url
     [ "$result" != "200" ] && echo "文件下载失败，正在退出！" && exit 1
     echo "-----------------------------------------------"
 	echo "开始解压文件！"
