@@ -49,7 +49,6 @@ ghcr.io/zhz1021/lucky:${{ Lucky版本号 }}
 - i386
 - arm64
 - armv7
-- armv6
 
 ## Credits
 
