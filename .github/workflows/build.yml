@@ -70,5 +70,3 @@ jobs:
             zhz1021/lucky:latest
             ghcr.io/${{ github.actor }}/lucky:${{ env.LUCKY_VERSION }}
             ghcr.io/${{ github.actor }}/lucky:latest
-          build-args: |
-            DERP_VERSION=${{ env.LUCKY_VERSION }}
