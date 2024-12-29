@@ -7,7 +7,7 @@ installStart(){
     luckydir=$install_dir/$luckPathSuff
 	echo "luckdir:"$luckydir
     version=$(curl -s https://api.github.com/repos/gdy666/lucky/releases/latest | jq -r '.tag_name')
-    download_url='https://github.com/gdy666/lucky/releases/tag/v'$version'/lucky_'$version'_Linux_'$cpucore'.tar.gz'
+    download_url='https://github.com/gdy666/lucky/releases/tag/'$version'/lucky_'$version'_Linux_'$cpucore'.tar.gz'
     echo "目标文件下载链接:" $download_url
     getFilesFromNetwork
 	installSetProfile
