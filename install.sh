@@ -6,9 +6,7 @@ installStart(){
     luckPathSuff='lucky.daji'
     luckydir=$install_dir/$luckPathSuff
 	echo "luckdir:"$luckydir
-    version=$(curl -s https://api.github.com/repos/gdy666/lucky/releases/latest | jq -r '.tag_name')
-    download_url='https://github.com/gdy666/lucky/releases/tag/'$version'/lucky_'$version'_Linux_'$cpucore'.tar.gz'
-    echo "目标文件下载链接:" $download_url
+	getTargetFileURL
     getFilesFromNetwork
 	installSetProfile
 	installSetInit
@@ -23,8 +21,36 @@ getCpuCore(){
 	[ -n "$(echo $cputype | grep -E "linux.*86_64.*")" ] && cpucore="x86_64"
 }
 
+getTargetFileURL(){
+	version=$(curl -s https://api.github.com/repos/gdy666/lucky/releases/latest | jq -r '.tag_name')
+    download_url='https://github.com/gdy666/lucky/releases/tag/'$version'/lucky_'$version'_Linux_'$cpucore'.tar.gz'
+    echo "目标文件下载链接:" $download_url
+}
+
+webget(){
+	#参数【$1】代表下载目录，【$2】代表在线地址
+	#参数【$3】代表输出显示，【$4】不启用重定向
+	if curl --version > /dev/null 2>&1;then
+		[ "$3" = "echooff" ] && progress='-s' || progress='-#'
+		[ -z "$4" ] && redirect='-L' || redirect=''
+		result=$(curl -w %{http_code} --connect-timeout 5 $progress $redirect -ko $1 $2)
+		[ -n "$(echo $result | grep -e ^2)" ] && result="200"
+	else
+		if wget --version > /dev/null 2>&1;then
+			[ "$3" = "echooff" ] && progress='-q' || progress='-q --show-progress'
+			[ "$4" = "rediroff" ] && redirect='--max-redirect=0' || redirect=''
+			certificate='--no-check-certificate'
+			timeout='--timeout=3'
+		fi
+		[ "$3" = "echoon" ] && progress=''
+		[ "$3" = "echooff" ] && progress='-q'
+		wget $progress $redirect $certificate $timeout -O $1 $2 
+		[ $? -eq 0 ] && result="200"
+	fi
+}
+
 getFilesFromNetwork(){
-    wget -O /tmp/lucky.tar.gz $download_url
+    webget /tmp/lucky.tar.gz $download_url
     [ "$result" != "200" ] && echo "文件下载失败，正在退出！" && exit 1
     echo "-----------------------------------------------"
 	echo "开始解压文件！"
