@@ -80,43 +80,20 @@ installSetProfile(){
 
 installSetInit(){
 #判断系统类型写入不同的启动文件
-if [ -f /etc/rc.common ];then
-        #设为init.d方式启动
-        echo "设为init.d方式启动"
+if [ -f /etc/rc.conf ];then
+        #设为init.d方式启动(openrc)
+        echo "设为init.d方式启动(openrc)"
         cp -f $luckydir/scripts/luckyservice /etc/init.d/$luckPathSuff
         chmod 755 /etc/init.d/$luckPathSuff
-		/etc/init.d/$luckPathSuff enable
-		/etc/init.d/$luckPathSuff start
+		rc-update add /etc/init.d/$luckPathSuff default
+		rc-service /etc/init.d/$luckPathSuff start
 else
-    [ -w /etc/systemd/system ] && sysdir=/etc/systemd/system
-    [ -w /usr/lib/systemd/system ] && sysdir=/usr/lib/systemd/system
-    if [ -n "$sysdir" ];then
-        #设为systemd方式启动
-        echo "设为systemd方式启动"
-		echo "sysdir:"$sysdir
-        mv $luckydir/scripts/lucky.service $sysdir/$luckPathSuff.service
-        sed -i "s%/etc/lucky%$luckydir%g" $sysdir/$luckPathSuff.service
-		chmod 000 $sysdir/$luckPathSuff.service
-        systemctl daemon-reload
-		if [  ! $? = 0 ];then
-			echo "systemctl daemon-reload 出错， 转为保守模式..."
-			installStartDaemon
-		else
-			systemctl enable $luckPathSuff.service
-			systemctl start $luckPathSuff.service
-		fi
-    else
-    #设为保守模式启动
-	installStartDaemon
-    fi
+echo "设为保守模式启动"
+type nohup >/dev/null 2>&1 && nohup=nohup
+$nohup $luckydir/lucky -c "$luckydir/lucky.conf" >/dev/null 2>&1 &
+echo "*/1 * * * * test -z \"\$(pidof lucky)\" && $luckydir/lucky -c $luckydir/lucky.conf #lucky保守模式守护进程" > /etc/periodic/minutely/lucky-check
+chmod +x /etc/periodic/minutely/lucky-check
 fi
-}
-
-installStartDaemon(){
-	echo "设为保守模式启动"
-	type nohup >/dev/null 2>&1 && nohup=nohup
-	$nohup $luckydir/lucky -c "$luckydir/lucky.conf" >/dev/null 2>&1 &
-	cronset '#lucky保守模式守护进程' "*/1 * * * * test -z \"\$(pidof lucky)\" && $luckydir/lucky -c $luckydir/lucky.conf & #lucky保守模式守护进程"
 }
 
 installStart
