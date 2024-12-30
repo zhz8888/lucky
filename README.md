@@ -35,6 +35,13 @@ services:
     network_mode: host
     restart: always
 ```
+
+- UNRAID Docker 模板
+
+```shell
+wget -O /boot/config/plugins/dockerMan/templates-user/my-Lucky.xml https://raw.githubusercontent.com/zhz8888/lucky/refs/heads/main/my-Lucky.xml
+```
+
 ## 架构支持
 
 - amd64
@@ -47,9 +54,9 @@ services:
 | 标签 | 镜像名 | 大小 |
 |------|----------------------------------|------------------------------------------------------------------------------------------------|
 | latest | `docker.io/zhz1021/lucky:latest` | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/latest?label=大小) |
-| latest | `ghcr.io/zhz1021/lucky:latest` | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/latest?label=大小) |
+| latest | `ghcr.io/zhz8888/lucky:latest` | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/latest?label=大小) |
 | v2.14.0 | `docker.io/zhz1021/lucky:v2.14.0` | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/v2.14.0?label=大小) |
-| v2.14.0 | `ghcr.io/zhz1021/lucky:v2.14.0` | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/v2.14.0?label=大小) |
+| v2.14.0 | `ghcr.io/zhz8888/lucky:v2.14.0` | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/v2.14.0?label=大小) |
 
 ## Credits
 
