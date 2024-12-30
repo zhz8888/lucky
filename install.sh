@@ -13,7 +13,7 @@ installStart(){
 }
 
 getCpuCore(){
-	cputype=$(uname -ms | tr ' ' '_' | tr '[A-Z]' '[a-z]')
+	cputype=$BUILT_ON_PLATFORM
 	echo "当前处理器架构为：" $cputype
 	[ -n "$(echo $cputype | grep -E "linux.*armv.*")" ] && cpucore="armv5"
 	[ -n "$(echo $cputype | grep -E "linux.*armv7.*")" ] && [ -n "$(cat /proc/cpuinfo | grep vfp)" ] && cpucore="armv7"
@@ -51,9 +51,9 @@ webget(){
 }
 
 getFilesFromNetwork(){
-	wget -O /tmp/lucky.tar.gz $download_url
-    # webget /tmp/lucky.tar.gz $download_url echoon
-    # [ "$result" != "200" ] && echo "文件下载失败，正在退出！" && exit 1
+	# wget -O /tmp/lucky.tar.gz $download_url
+    webget /tmp/lucky.tar.gz $download_url echoon
+    [ "$result" != "200" ] && echo "文件下载失败，正在退出！" && exit 1
     echo "-----------------------------------------------"
 	echo "开始解压文件！"
     mkdir -p $luckydir > /dev/null

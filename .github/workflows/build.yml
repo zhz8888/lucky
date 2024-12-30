@@ -16,6 +16,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      PLATFORMS: ${{ matrix.PLATFORMS }}
+
+    strategy:
+      matrix:
+        PLATFORMS:
+          - linux/amd64,linux/386,linux/arm64,linux/arm/v7
+
     steps:
       - uses: actions/checkout@v2
 
@@ -63,10 +71,12 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: linux/amd64, linux/386, linux/arm64, linux/arm/v7
+          platforms: ${{ matrix.PLATFORMS }}
           push: true
           tags: |
             zhz1021/lucky:${{ env.LUCKY_VERSION }}
             zhz1021/lucky:latest
             ghcr.io/${{ github.actor }}/lucky:${{ env.LUCKY_VERSION }}
             ghcr.io/${{ github.actor }}/lucky:latest
+          build-args:
+            TARGETARCH = ${{ matrix.PLATFORMS }}
