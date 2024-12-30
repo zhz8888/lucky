@@ -2,7 +2,7 @@
 
 installStart(){
     getCpuCore
-    install_dir=/usr/share
+    install_dir=/etc
     luckPathSuff='lucky.daji'
     luckydir=$install_dir/$luckPathSuff
 	echo "luckdir: "$luckydir
@@ -91,6 +91,7 @@ else
 echo "设为保守模式启动"
 type nohup >/dev/null 2>&1 && nohup=nohup
 $nohup $luckydir/lucky -c "$luckydir/lucky.conf" >/dev/null 2>&1 &
+mkdir -p /etc/periodic/minutely/
 echo "*/1 * * * * test -z \"\$(pidof lucky)\" && $luckydir/lucky -c $luckydir/lucky.conf #lucky保守模式守护进程" > /etc/periodic/minutely/lucky-check
 chmod +x /etc/periodic/minutely/lucky-check
 fi
