@@ -5,7 +5,7 @@ installStart(){
     install_dir=/usr/share
     luckPathSuff='lucky.daji'
     luckydir=$install_dir/$luckPathSuff
-	echo "luckdir:"$luckydir
+	echo "luckdir: "$luckydir
 	getTargetFileURL
     getFilesFromNetwork
 	installSetProfile
@@ -14,12 +14,11 @@ installStart(){
 
 getCpuCore(){
 	cputype=$BUILT_ON_PLATFORM
-	echo "当前处理器架构为：" $cputype
-	[ -n "$(echo $cputype | grep -E "linux.*armv.*")" ] && cpucore="armv5"
-	[ -n "$(echo $cputype | grep -E "linux.*armv7.*")" ] && [ -n "$(cat /proc/cpuinfo | grep vfp)" ] && cpucore="armv7"
-	[ -n "$(echo $cputype | grep -E "linux.*aarch64.*|linux.*armv8.*")" ] && cpucore="arm64"
-	[ -n "$(echo $cputype | grep -E "linux.*86.*")" ] && cpucore="i386"
-	[ -n "$(echo $cputype | grep -E "linux.*86_64.*")" ] && cpucore="x86_64"
+	echo "当前处理器架构为："$cputype
+	[ -n "$(echo $cputype | grep -E "armv7")" ] && cpucore="armv7"
+	[ -n "$(echo $cputype | grep -E "arm64")" ] && cpucore="arm64"
+	[ -n "$(echo $cputype | grep -E "386")" ] && cpucore="i386"
+	[ -n "$(echo $cputype | grep -E "amd64")" ] && cpucore="x86_64"
 }
 
 getTargetFileURL(){
