@@ -16,7 +16,7 @@ RUN apk update && apk upgrade && apk add --no-cache bash curl wget net-tools jq 
 RUN ln -sf /bin/busybox /usr/bin/crontab
 RUN bash /tmp/install.sh && rm /tmp/install.sh
 
-ENTRYPOINT ["/usr/share/lucky"]
+ENTRYPOINT ["/etc/lucky"]
 
 CMD ["-cd", "/goodluck"]
 CMD ["crond", "-f", "-l", "8"]

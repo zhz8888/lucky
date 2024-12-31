@@ -4,7 +4,7 @@ installStart(){
     getCpuCore
     install_dir=/etc
     luckPathSuff='lucky.daji'
-    luckydir=$install_dir/$luckPathSuff
+    luckydir=$install_dir
 	echo "luckdir: "$luckydir
 	getTargetFileURL
     getFilesFromNetwork
