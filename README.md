@@ -1,8 +1,6 @@
 # Lucky
 
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/zhz8888/lucky/build.yml)
-[![platfrom](https://img.shields.io/badge/platform-amd64%20%7C%20arm64-brightgreen)](https://hub.docker.com/r/zhz1021/lucky/tags)
-
 
 ## 简介
 
