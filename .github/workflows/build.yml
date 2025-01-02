@@ -52,7 +52,7 @@ jobs:
       - name: Download latest lucky
         if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
         run: |
-          wget -O 'lucky.tar.gz' 'https://github.com/gdy666/lucky/releases/download/v'$LUCKY_VERSION'/lucky_'$LUCKY_VERSION'_Linux_amd64.tar.gz'
+          wget -O 'lucky.tar.gz' 'https://github.com/gdy666/lucky/releases/download/v'$LUCKY_VERSION'/lucky_'$LUCKY_VERSION'_Linux_x86_64.tar.gz'
           tar -zxvf lucky.tar.gz
           tree
 
