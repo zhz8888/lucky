@@ -1,0 +1,21 @@
+FROM alpine
+
+ARG TARGETARCH
+ENV BUILT_ON_PLATFORM $TARGETARCH
+
+USER root
+
+RUN apk update && apk upgrade && apk add --no-cache bash curl wget net-tools tar ca-certificates busybox-suid
+RUN ln -sf /bin/busybox /usr/bin/crontab
+
+EXPOSE 16601
+
+WORKDIR /app
+WORKDIR /goodluck
+
+COPY install.sh /app/install.sh
+RUN bash /tmp/install.sh && rm /tmp/install.sh
+
+ENTRYPOINT ["/app/lucky"]
+
+CMD ["-c" "/goodluck/lucky.conf" "-runInDocker"]
