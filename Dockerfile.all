@@ -5,7 +5,7 @@ ENV BUILT_ON_PLATFORM $TARGETARCH
 
 USER root
 
-RUN apk update && apk upgrade && apk add --no-cache bash curl wget net-tools tar ca-certificates busybox-suid
+RUN apk update && apk upgrade && apk add --no-cache bash curl wget net-tools tar ca-certificates busybox-suid jq
 RUN ln -sf /bin/busybox /usr/bin/crontab
 
 EXPOSE 16601
@@ -14,7 +14,7 @@ WORKDIR /app
 WORKDIR /goodluck
 
 COPY install.sh /app/install.sh
-RUN bash /tmp/install.sh && rm /tmp/install.sh
+RUN bash /app/install.sh && rm /app/install.sh
 
 ENTRYPOINT ["/app/lucky"]
 

@@ -13,15 +13,17 @@ permissions:
   packages: write
 
 jobs:
-  env:
-    PLATFORMS: ${{ matrix.PLATFORMS }}
-  strategy:
-    matrix:
-      PLATFORMS:
-        - linux/amd64,linux/386,linux/arm64,linux/arm/v7
-
   build-all-image:
     runs-on: ubuntu-latest
+
+    env:
+      PLATFORMS: ${{ matrix.PLATFORMS }}
+
+    strategy:
+      matrix:
+        PLATFORMS:
+          - linux/amd64,linux/386,linux/arm64,linux/arm/v7
+
     steps:
       - uses: actions/checkout@v2
    
@@ -69,6 +71,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          file: ./Dockerfile.all
           platforms: ${{ matrix.PLATFORMS }}
           push: true
           tags: |
