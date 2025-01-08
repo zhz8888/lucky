@@ -2,7 +2,7 @@ FROM alpine
 
 USER root
 
-RUN apk update && apk upgrade && apk add --no-cache bash curl wget net-tools tar ca-certificates busybox-suid
+RUN apk update && apk upgrade && apk add --no-cache bash curl wget net-tools tar ca-certificates busybox-suid tzdata
 RUN ln -sf /bin/busybox /usr/bin/crontab
 
 EXPOSE 16601

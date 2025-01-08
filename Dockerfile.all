@@ -5,7 +5,7 @@ ENV BUILT_ON_PLATFORM $TARGETARCH
 
 USER root
 
-RUN apk update && apk upgrade && apk add --no-cache bash curl wget net-tools tar ca-certificates busybox-suid jq
+RUN apk update && apk upgrade && apk add --no-cache bash curl wget net-tools tar ca-certificates busybox-suid tzdata jq
 RUN ln -sf /bin/busybox /usr/bin/crontab
 
 EXPOSE 16601
