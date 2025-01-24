@@ -1,4 +1,4 @@
-FROM ubuntu AS builder
+FROM debian AS builder
 WORKDIR /app
 
 ARG TARGETARCH
