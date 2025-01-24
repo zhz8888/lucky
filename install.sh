@@ -7,8 +7,8 @@ installStart(){
 	echo "luckdir: "$luckydir
 	getTargetFileURL
     getFilesFromNetwork
-	installSetProfile
-	#installSetInit
+	# installSetProfile
+	# installSetInit
 }
 getCpuCore(){
 	cputype=$BUILT_ON_PLATFORM
@@ -24,8 +24,8 @@ getTargetFileURL(){
     echo "目标文件下载链接:" $download_url
 }
 webget(){
-	#参数【$1】代表下载目录，【$2】代表在线地址
-	#参数【$3】代表输出显示，【$4】不启用重定向
+	# 参数【$1】代表下载目录，【$2】代表在线地址
+	# 参数【$3】代表输出显示，【$4】不启用重定向
 	if curl --version > /dev/null 2>&1;then
 		[ "$3" = "echooff" ] && progress='-s' || progress='-#'
 		[ -z "$4" ] && redirect='-L' || redirect=''
@@ -73,21 +73,21 @@ installSetProfile(){
 	echo "Profile:" $profile
 }
 installSetInit(){
-#判断系统类型写入不同的启动文件
-if [ -f /etc/rc.conf ];then
-        #设为init.d方式启动(openrc)
-        echo "设为init.d方式启动(openrc)"
-        cp -f $luckydir/scripts/luckyservice /etc/init.d/$luckPathSuff
-        chmod 755 /etc/init.d/$luckPathSuff
+	# 判断系统类型写入不同的启动文件
+	if [ -f /etc/rc.conf ];then
+		# 设为init.d方式启动(openrc)
+		echo "设为init.d方式启动(openrc)"
+		cp -f $luckydir/scripts/luckyservice /etc/init.d/$luckPathSuff
+		chmod 755 /etc/init.d/$luckPathSuff
 		rc-update add /etc/init.d/$luckPathSuff default
 		rc-service /etc/init.d/$luckPathSuff start
-else
-echo "设为保守模式启动"
-type nohup >/dev/null 2>&1 && nohup=nohup
-$nohup $luckydir/lucky -c "$luckydir/lucky.conf" >/dev/null 2>&1 &
-mkdir -p /etc/periodic/minutely/
-echo "*/1 * * * * test -z \"\$(pidof lucky)\" && $luckydir/lucky -c $luckydir/lucky.conf #lucky保守模式守护进程" > /etc/periodic/minutely/lucky-check
-chmod +x /etc/periodic/minutely/lucky-check
-fi
+	else
+		echo "设为保守模式启动"
+		type nohup >/dev/null 2>&1 && nohup=nohup
+		$nohup $luckydir/lucky -c "$luckydir/lucky.conf" >/dev/null 2>&1 &
+		mkdir -p /etc/periodic/minutely/
+		echo "*/1 * * * * test -z \"\$(pidof lucky)\" && $luckydir/lucky -c $luckydir/lucky.conf #lucky保守模式守护进程" > /etc/periodic/minutely/lucky-check
+		chmod +x /etc/periodic/minutely/lucky-check
+	fi
 }
 installStart

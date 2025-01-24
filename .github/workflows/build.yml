@@ -13,20 +13,13 @@ permissions:
   packages: write
 
 jobs:
-  build-all-image:
+  build:
     runs-on: ubuntu-latest
 
-    env:
-      PLATFORMS: ${{ matrix.PLATFORMS }}
-
-    strategy:
-      matrix:
-        PLATFORMS:
-          - linux/amd64,linux/386,linux/arm64,linux/arm/v7
-
     steps:
-      - uses: actions/checkout@v2
-   
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Log in to GitHub Docker Registry
         uses: docker/login-action@v1
         with:
@@ -66,74 +59,22 @@ jobs:
         if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push
+      - name: Build all platforms images and push
         if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./Dockerfile.all
-          platforms: ${{ matrix.PLATFORMS }}
+          platforms: linux/amd64,linux/386,linux/arm64,linux/arm/v7
           push: true
           tags: |
-            zhz1021/lucky:${{ env.LUCKY_VERSION }}
-            zhz1021/lucky:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/lucky:${{ env.LUCKY_VERSION }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/lucky:latest
             ghcr.io/${{ github.actor }}/lucky:${{ env.LUCKY_VERSION }}
             ghcr.io/${{ github.actor }}/lucky:latest
           build-args:
-            TARGETARCH = ${{ matrix.PLATFORMS }}
+            TARGETARCH = linux/amd64,linux/386,linux/arm64,linux/arm/v7
 
-  build-amd64-image:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-   
-      - name: Log in to GitHub Docker Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          logout: false
-
-      - name: Log in to DockerHub Registry
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Check if the image exists
-        run: |
-          GHCR_TOKEN=$(echo ${{ secrets.GITHUB_TOKEN }} | base64)
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: Bearer $GHCR_TOKEN" \
-            https://ghcr.io/v2/${{ github.repository }}/manifests/${{ env.LUCKY_VERSION }})
-          IMAGE_EXISTS=$(if [ $HTTP_CODE -eq 200 ]; then echo "true"; else echo "false"; fi)
-          echo "HTTP code: $HTTP_CODE, Image exists: $IMAGE_EXISTS"
-          echo IMAGE_EXISTS=$IMAGE_EXISTS >> $GITHUB_ENV
-
-      - name: Get latest lucky version
-        if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
-        run: |
-          LUCKY_VERSION=$(v=$(curl -s https://api.github.com/repos/gdy666/lucky/releases/latest | jq -r '.tag_name'); echo ${v#?})
-          echo "Latest Lucky version: $LUCKY_VERSION"
-          echo LUCKY_VERSION=$LUCKY_VERSION >> $GITHUB_ENV
-
-      - name: Download latest lucky
-        if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
-        run: |
-          wget -O 'lucky.tar.gz' 'https://github.com/gdy666/lucky/releases/download/v'$LUCKY_VERSION'/lucky_'$LUCKY_VERSION'_Linux_x86_64.tar.gz'
-          tar -zxvf lucky.tar.gz
-          tree
-
-      - name: Set up QEMU
-        if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build and push
+      - name: Build amd64 image and push
         if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
         uses: docker/build-push-action@v6
         with:
@@ -141,61 +82,12 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            zhz1021/lucky:${{ env.LUCKY_VERSION }}-amd64
+            ${{ secrets.DOCKERHUB_USERNAME }}/lucky:${{ env.LUCKY_VERSION }}-amd64
             ghcr.io/${{ github.actor }}/lucky:${{ env.LUCKY_VERSION }}-amd64
+          build-args:
+            TARGETARCH = linux/amd64
 
-  build-i386-image:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-   
-      - name: Log in to GitHub Docker Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          logout: false
-
-      - name: Log in to DockerHub Registry
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Check if the image exists
-        run: |
-          GHCR_TOKEN=$(echo ${{ secrets.GITHUB_TOKEN }} | base64)
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: Bearer $GHCR_TOKEN" \
-            https://ghcr.io/v2/${{ github.repository }}/manifests/${{ env.LUCKY_VERSION }})
-          IMAGE_EXISTS=$(if [ $HTTP_CODE -eq 200 ]; then echo "true"; else echo "false"; fi)
-          echo "HTTP code: $HTTP_CODE, Image exists: $IMAGE_EXISTS"
-          echo IMAGE_EXISTS=$IMAGE_EXISTS >> $GITHUB_ENV
-
-      - name: Get latest lucky version
-        if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
-        run: |
-          LUCKY_VERSION=$(v=$(curl -s https://api.github.com/repos/gdy666/lucky/releases/latest | jq -r '.tag_name'); echo ${v#?})
-          echo "Latest Lucky version: $LUCKY_VERSION"
-          echo LUCKY_VERSION=$LUCKY_VERSION >> $GITHUB_ENV
-
-      - name: Download latest lucky
-        if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
-        run: |
-          wget -O 'lucky.tar.gz' 'https://github.com/gdy666/lucky/releases/download/v'$LUCKY_VERSION'/lucky_'$LUCKY_VERSION'_Linux_i386.tar.gz'
-          tar -zxvf lucky.tar.gz
-          tree
-
-      - name: Set up QEMU
-        if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build and push
+      - name: Build i386 image and push
         if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
         uses: docker/build-push-action@v6
         with:
@@ -203,61 +95,12 @@ jobs:
           platforms: linux/386
           push: true
           tags: |
-            zhz1021/lucky:${{ env.LUCKY_VERSION }}-i386
+            ${{ secrets.DOCKERHUB_USERNAME }}/lucky:${{ env.LUCKY_VERSION }}-i386
             ghcr.io/${{ github.actor }}/lucky:${{ env.LUCKY_VERSION }}-i386
+          build-args:
+            TARGETARCH = linux/386
 
-  build-arm64-image:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-   
-      - name: Log in to GitHub Docker Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          logout: false
-
-      - name: Log in to DockerHub Registry
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Check if the image exists
-        run: |
-          GHCR_TOKEN=$(echo ${{ secrets.GITHUB_TOKEN }} | base64)
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: Bearer $GHCR_TOKEN" \
-            https://ghcr.io/v2/${{ github.repository }}/manifests/${{ env.LUCKY_VERSION }})
-          IMAGE_EXISTS=$(if [ $HTTP_CODE -eq 200 ]; then echo "true"; else echo "false"; fi)
-          echo "HTTP code: $HTTP_CODE, Image exists: $IMAGE_EXISTS"
-          echo IMAGE_EXISTS=$IMAGE_EXISTS >> $GITHUB_ENV
-
-      - name: Get latest lucky version
-        if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
-        run: |
-          LUCKY_VERSION=$(v=$(curl -s https://api.github.com/repos/gdy666/lucky/releases/latest | jq -r '.tag_name'); echo ${v#?})
-          echo "Latest Lucky version: $LUCKY_VERSION"
-          echo LUCKY_VERSION=$LUCKY_VERSION >> $GITHUB_ENV
-
-      - name: Download latest lucky
-        if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
-        run: |
-          wget -O 'lucky.tar.gz' 'https://github.com/gdy666/lucky/releases/download/v'$LUCKY_VERSION'/lucky_'$LUCKY_VERSION'_Linux_arm64.tar.gz'
-          tar -zxvf lucky.tar.gz
-          tree
-
-      - name: Set up QEMU
-        if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build and push
+      - name: Build arm64 image and push
         if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
         uses: docker/build-push-action@v6
         with:
@@ -265,61 +108,12 @@ jobs:
           platforms: linux/arm64
           push: true
           tags: |
-            zhz1021/lucky:${{ env.LUCKY_VERSION }}-arm64
+            ${{ secrets.DOCKERHUB_USERNAME }}/lucky:${{ env.LUCKY_VERSION }}-arm64
             ghcr.io/${{ github.actor }}/lucky:${{ env.LUCKY_VERSION }}-arm64
+          build-args:
+            TARGETARCH = linux/arm64
 
-  build-armv7-image:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-   
-      - name: Log in to GitHub Docker Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          logout: false
-
-      - name: Log in to DockerHub Registry
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Check if the image exists
-        run: |
-          GHCR_TOKEN=$(echo ${{ secrets.GITHUB_TOKEN }} | base64)
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: Bearer $GHCR_TOKEN" \
-            https://ghcr.io/v2/${{ github.repository }}/manifests/${{ env.LUCKY_VERSION }})
-          IMAGE_EXISTS=$(if [ $HTTP_CODE -eq 200 ]; then echo "true"; else echo "false"; fi)
-          echo "HTTP code: $HTTP_CODE, Image exists: $IMAGE_EXISTS"
-          echo IMAGE_EXISTS=$IMAGE_EXISTS >> $GITHUB_ENV
-
-      - name: Get latest lucky version
-        if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
-        run: |
-          LUCKY_VERSION=$(v=$(curl -s https://api.github.com/repos/gdy666/lucky/releases/latest | jq -r '.tag_name'); echo ${v#?})
-          echo "Latest Lucky version: $LUCKY_VERSION"
-          echo LUCKY_VERSION=$LUCKY_VERSION >> $GITHUB_ENV
-
-      - name: Download latest lucky
-        if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
-        run: |
-          wget -O 'lucky.tar.gz' 'https://github.com/gdy666/lucky/releases/download/v'$LUCKY_VERSION'/lucky_'$LUCKY_VERSION'_Linux_armv7.tar.gz'
-          tar -zxvf lucky.tar.gz
-          tree
-
-      - name: Set up QEMU
-        if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build and push
+      - name: Build armv7 image and push
         if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
         uses: docker/build-push-action@v6
         with:
@@ -327,5 +121,7 @@ jobs:
           platforms: linux/arm/v7
           push: true
           tags: |
-            zhz1021/lucky:${{ env.LUCKY_VERSION }}-armv7
+            ${{ secrets.DOCKERHUB_USERNAME }}/lucky:${{ env.LUCKY_VERSION }}-armv7
             ghcr.io/${{ github.actor }}/lucky:${{ env.LUCKY_VERSION }}-armv7
+          build-args:
+            TARGETARCH = linux/arm/v7

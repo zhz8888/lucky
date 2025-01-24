@@ -1,17 +1,27 @@
+FROM ubuntu AS builder
+WORKDIR /app
+
+ARG TARGETARCH
+ENV BUILT_ON_PLATFORM $TARGETARCH
+
+RUN apt-get update && apt-get install -y curl wget tar jq tree
+
+COPY install.sh /app/install.sh
+RUN bash /app/install.sh
+
 FROM alpine
+LABEL maintainer="https://github.com/zhz8888"
 
-USER root
-
-RUN apk update && apk upgrade 
-RUN apk add --no-cache bash curl wget net-tools tar ca-certificates busybox-suid tzdata jq
+RUN apk update && apk upgrade
+RUN apk add --no-cache bash curl wget net-tools tar ca-certificates busybox-suid tzdata
 RUN ln -sf /bin/busybox /usr/bin/crontab
-	
+
 EXPOSE 16601
 
 WORKDIR /app
 WORKDIR /goodluck
 
-COPY lucky /app/lucky
+COPY --from=builder /app/lucky /app/lucky
 
 ENTRYPOINT ["/app/lucky"]
 
