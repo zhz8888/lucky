@@ -38,7 +38,7 @@ services:
 - UNRAID Docker 模板
 
 ```bash
-wget -O /boot/config/plugins/dockerMan/templates-user/my-Lucky.xml https://cdn.jsdelivr.net/gh/zhz8888/lucky/my-Lucky.xml
+wget -O /boot/config/plugins/dockerMan/templates-user/my-Lucky.xml https://cdn.jsdelivr.net/gh/zhz8888/lucky@main/my-Lucky.xml
 ```
 
 ## 架构支持
