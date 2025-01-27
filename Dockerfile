@@ -13,7 +13,7 @@ FROM alpine
 LABEL maintainer="https://github.com/zhz8888"
 
 RUN apk update && apk upgrade
-RUN apk add --no-cache bash curl wget net-tools tar ca-certificates busybox-suid tzdata
+RUN apk add --no-cache bash curl wget net-tools tar ca-certificates busybox-suid tzdata jq
 RUN ln -sf /bin/busybox /usr/bin/crontab
 
 EXPOSE 16601
