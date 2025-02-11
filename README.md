@@ -4,7 +4,7 @@
 
 ## 简介
 
-本项目是[Lucky](https://github.com/gdy666/lucky)的 Docker 镜像源码，补全了原版 Docker 镜像缺失的软件包。
+本项目是自编译的[Lucky](https://github.com/gdy666/lucky)的 Docker 镜像，补全了原版 Docker 镜像缺失的软件包。
 
 在正式使用前请先阅读[官方文档](https://lucky666.cn/)。
 
@@ -50,20 +50,7 @@ wget -O /boot/config/plugins/dockerMan/templates-user/my-Lucky.xml https://cdn.j
 
 ## 可用镜像列表
 
-| 标签           | 镜像名                                  | 大小                                                                                  |
-|--------------|--------------------------------------|-------------------------------------------------------------------------------------|
-| latest       | `zhz1021/lucky:latest`               | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/latest?label=大小)       |
-| latest       | `ghcr.io/zhz8888/lucky:latest`       | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/latest?label=大小)       |
-| 2.14.0       | `zhz1021/lucky:2.14.0`               | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/2.14.0?label=大小)       |
-| 2.14.0       | `ghcr.io/zhz8888/lucky:2.14.0`       | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/2.14.0?label=大小)       |
-| 2.14.0-amd64 | `zhz1021/lucky:2.14.0-amd64`         | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/2.14.0-amd64?label=大小) |
-| 2.14.0-amd64 | `ghcr.io/zhz8888/lucky:2.14.0-amd64` | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/2.14.0-amd64?label=大小) |
-| 2.14.0-i386  | `zhz1021/lucky:2.14.0-i386`          | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/2.14.0-i386?label=大小)  |
-| 2.14.0-i386  | `ghcr.io/zhz8888/lucky:2.14.0-i386`  | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/2.14.0-i386?label=大小)  |
-| 2.14.0-arm64 | `zhz1021/lucky:2.14.0-arm64`         | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/2.14.0-arm64?label=大小) |
-| 2.14.0-arm64 | `ghcr.io/zhz8888/lucky:2.14.0-arm64` | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/2.14.0-arm64?label=大小) |
-| 2.14.0-armv7 | `zhz1021/lucky:2.14.0-armv7`         | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/2.14.0-armv7?label=大小) |
-| 2.14.0-armv7 | `ghcr.io/zhz8888/lucky:2.14.0-armv7` | ![大小](https://img.shields.io/docker/image-size/zhz1021/lucky/2.14.0-armv7?label=大小) |
+详见[Github Packages](https://github.com/zhz8888/lucky/pkgs/container/lucky/versions)或[Docker Hub](https://hub.docker.com/r/zhz1021/lucky/tags)
 
 ## Credits
 
