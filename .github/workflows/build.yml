@@ -47,7 +47,7 @@ jobs:
       - name: Get latest lucky version
         if: ${{ env.IMAGE_EXISTS == 'false' || github.event_name != 'schedule' }}
         run: |
-          LUCKY_VERSION=$(v=$(curl -s https://api.github.com/repos/gdy666/lucky/releases/latest | jq -r '.tag_name'); echo ${v#?})
+          LUCKY_VERSION=$(v=$(curl -s https://api.github.com/repos/zhz8888/lucky/releases/latest | jq -r '.tag_name'); echo ${v#?})
           echo "Latest Lucky version: $LUCKY_VERSION"
           echo LUCKY_VERSION=$LUCKY_VERSION >> $GITHUB_ENV
 
