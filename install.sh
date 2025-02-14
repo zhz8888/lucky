@@ -19,8 +19,8 @@ getCpuCore(){
 	[ -n "$(echo $cputype | grep -E "amd64")" ] && cpucore="x86_64"
 }
 getTargetFileURL(){
-	version=$(v=$(curl -s https://api.github.com/repos/gdy666/lucky/releases/latest | jq -r '.tag_name'); echo ${v#?})
-    download_url='https://github.com/gdy666/lucky/releases/download/v'$version'/lucky_'$version'_Linux_'$cpucore'.tar.gz'
+	version=$(v=$(curl -s https://api.github.com/repos/zhz8888/lucky/releases/latest | jq -r '.tag_name'); echo ${v#?})
+    download_url='https://github.com/zhz8888/lucky/releases/download/v'$version'/lucky_'$version'_Linux_'$cpucore'.tar.gz'
     echo "目标文件下载链接:" $download_url
 }
 webget(){
