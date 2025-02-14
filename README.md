@@ -52,7 +52,7 @@ wget -O /boot/config/plugins/dockerMan/templates-user/my-Lucky.xml https://cdn.j
 
 ## 可用镜像列表
 
-详见[Github Packages](https://github.com/zhz8888/lucky/pkgs/container/lucky/versions)或[Docker Hub](https://hub.docker.com/r/zhz1021/lucky/tags)
+详见[Docker Hub](https://hub.docker.com/r/zhz1021/lucky/tags)
 
 ## Credits
 
