@@ -4,9 +4,9 @@
 
 ## 简介
 
-本项目是自编译的[Lucky](https://github.com/gdy666/lucky)的 Docker 镜像，补全了原版 Docker 镜像缺失的软件包。
+本项目是自编译的 [Lucky](https://github.com/gdy666/lucky) 的 Docker 镜像，补全了原版 Docker 镜像缺失的软件包。
 
-本项目使用的版本为`Lucky`，非`万吉`。关于`Lucky`和`万吉`的区别请见[此处](https://lucky666.cn/docs/problemset#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)。
+本项目使用的版本为 `Lucky` ，非 `万吉` 。关于 `Lucky` 和 `万吉` 的区别请见[此处](https://lucky666.cn/docs/problemset#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)。
 
 在正式使用前请先阅读[官方文档](https://lucky666.cn/docs/intro)。
 
@@ -49,6 +49,7 @@ wget -O /boot/config/plugins/dockerMan/templates-user/my-Lucky.xml https://cdn.j
 - i386
 - arm64
 - armv7
+- riscv64
 
 ## 可用镜像列表
 

@@ -1,4 +1,4 @@
-FROM debian AS builder
+FROM debian:trixie AS builder
 WORKDIR /app
 
 ARG TARGETARCH

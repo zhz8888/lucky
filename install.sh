@@ -17,6 +17,7 @@ getCpuCore(){
 	[ -n "$(echo $cputype | grep -E "arm64")" ] && cpucore="arm64"
 	[ -n "$(echo $cputype | grep -E "386")" ] && cpucore="i386"
 	[ -n "$(echo $cputype | grep -E "amd64")" ] && cpucore="x86_64"
+	[ -n "$(echo $cputype | grep -E "riscv64")" ] && cpucore="riscv64"
 }
 getTargetFileURL(){
 	version=$(v=$(curl -s https://api.github.com/repos/zhz8888/lucky/releases/latest | jq -r '.tag_name'); echo ${v#?})
