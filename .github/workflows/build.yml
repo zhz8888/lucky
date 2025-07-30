@@ -48,4 +48,4 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/lucky:${{ env.LUCKY_VERSION }}
             ${{ secrets.DOCKERHUB_USERNAME }}/lucky:latest
           build-args:
-            TARGETARCH = linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/riscv64
+            TARGET_ARCH = linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/riscv64
